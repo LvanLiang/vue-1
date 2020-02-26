@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    
+    <header></header>
+
+    <div id="app">
+        ${{newPrice}}
+
+        <ul>
+            <li v-for="news in newsReverse">{{news.title}}-{{news.date}}</li>
+        </ul>
+    </div>
+
+
+    <br/><br/>
+    <div id="app-2">
+        {{num}}
+        <btn @click.native="add"></btn>
+    </div>
+
+
+
+    <br/><br/>
+    <div id="app-3">
+        <p>温度：{{temperature}}</p>
+        <p>穿衣:{{dress}}</p>
+        <p><button @click="addT">温度增加</button><button @click="reduceT">温度降低</button></p>
+    </div>
+
+    <script>
+        //vue扩展 标签传递参数
+        var vueExtendHeader = Vue.extend({
+            template:'<p>{{message}}-{{a}}</p>',
+            data:function(){
+                return {
+                    message:'hello vue are you ok?'
+                }
+            },
+            props:['a']
+        });
+        new vueExtendHeader({propsData:{a:'fine'}}).$mount('header');
+
+
+
+        //computed 的作用主要是对原数据进行改造输出。改造输出：包括格式的编辑，大小写转换，顺序重排，添加符号……。
+        var newsList=[
+            {title:'香港或就“装甲车被扣”事件追责 起诉涉事运输公司',date:'2017/3/10'},
+            {title:'日本第二大准航母服役 外媒：针对中国潜艇',date:'2017/3/12'},
+            {title:'中国北方将有明显雨雪降温天气 南方阴雨持续',date:'2017/3/13'},
+            {title:'起底“最短命副市长”：不到40天落马，全家被查',date:'2017/3/23'},
+        ];
+        var app = new Vue({
+            el: '#app',
+            data:{
+                price:100,
+                newsList:newsList
+            },
+            computed:{
+                newPrice:function(){
+                    return this.price =  '¥' + this.price + '元';
+                },
+                newsReverse:function(){
+                    return this.newsList.reverse();
+                }
+            }
+        });
+
+        
+        
+        // Methods Option 方法选项
+        var btnComponent = {
+            template:`<button>自增</button>`
+        }
+        var app2 = new Vue({
+            el: '#app-2',
+            data:{
+                num :1
+            },
+            components:{
+                'btn':btnComponent
+            },
+            methods:{
+                add:function(){
+                    this.num++;
+                }
+            }
+        })
+
+
+        //watch 数据变化的监控经常使用，我们可以先来看一个简单的数据变化监控的例子
+        var suggestion=['T恤短袖','夹克长裙','棉衣羽绒服'];
+        var app3 = new Vue({
+            el: '#app-3',
+            data:{
+                temperature:10,
+                dress: suggestion[0]
+            },
+            methods:{
+                addT:function(){
+                    this.temperature+=5;
+                },
+                reduceT:function(){
+                    this.temperature-=5;
+                }
+            },
+            watch:{
+                temperature:function(newVal, oldVal){
+                    if(newVal>=26){
+                        this.dress=suggestion[0];
+                    }else if(newVal<26 && newVal >=0)
+                    {
+                        this.dress=suggestion[1];
+                    }else{
+                        this.dress=suggestion[2];
+                    }
+                }
+            }
+        })
+        
+
+    </script>
+</body>
+</html>

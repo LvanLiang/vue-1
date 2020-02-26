@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <title>内容分发</title>
+</head>
+<body>
+    <div id="app">
+        <!--此时，我们的 todo-title 和 todo-items 组件分别被分发到了 todo 组件的 todo-title 和 todo-items 插槽中-->
+        <todo>
+            <todo-title slot="todo-title" v-bind:title="listTitle"></todo-title>
+            <todo-items slot="todo-items" v-for="(item, index) in todoItems" v-bind:item="item" v-bind:index="index" :key="index"></todo-items>
+        </todo>
+    </div>
+
+    <script type="text/javascript">
+        //定义一个名为todo的待办事项组件,该组件中放置了两个插槽，分别为todo-title和todo-items
+        Vue.component('todo', {
+            template: '<div>\
+                    <slot name="todo-title"></slot>\
+                    <ul>\
+                        <slot name="todo-items"></slot>\
+                    </ul>\
+               </div>'
+        });
+
+
+        //定义一个名为 todo-title 的待办标题组件
+        Vue.component('todo-title', {
+            props: ['title'],
+            template: '<div>{{title}}</div>'
+        });
+
+        //定义一个名为 todo-items 的待办内容组件
+        Vue.component('todo-items', {
+            props: ['item', 'index'],
+            template: '<li>{{index + 1}}. {{item}}</li>'
+        });
+
+        //实例化 Vue 并初始化数据
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                listTitle: "我喜欢的书如下",
+                todoItems: ['《刀剑神域3》', '《关于我转生成为史莱姆这件事》', '《实力至上主义教室》']
+            }
+        });
+
+    </script>
+
+</body>
+</html>

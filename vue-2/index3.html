@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <liang></liang>
+        <hello></hello>
+    </div>
+
+
+    <br /><br />
+    <div id="app-2">
+        <pandan v-bind:here="message"></pandan>
+    </div>
+
+
+    <br /><br />
+    <div id="app-3">
+        <liangpa></liangpa>
+    </div>
+
+
+    <br /><br />
+    <div id="app-4">
+        <component v-bind:is="who"></component>
+        <button @click="changeComponent">changeComponent</button>
+    </div>
+
+
+    <script>
+
+        //全局化注册组件
+        Vue.component('liang',{
+            template: '<div style="color:red;">全局化注册的liang标签</div>'
+        });
+
+        //局部注册局部组件
+        var helloworld = { template:`<div style="color:green;">局部注册的hello world标签</div>`}
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'hello vue!'
+            },
+            components:{
+                'hello':helloworld
+            }
+        });
+
+
+        //定义属性并获取组件的属性
+        var pandanComponent = {
+            template:`<div>my here is {{here}}.</div>`,
+            props:['here']
+        };
+        var app2 = new Vue({
+            el: '#app-2',
+            data: {
+                message: 'USA'
+            },
+            components: {
+                "pandan":pandanComponent
+            }
+        });
+
+
+        //Component 父子组件关系
+        var cityComponent = {
+            template: `<div>Sichuan of China</div>`
+        };
+        var liangpaComponent = {
+            template:`<div><p> Panda from China!</p><city></city></div>`,
+            components: {
+                'city': cityComponent
+            }
+        };
+        var app3 = new Vue({
+            el: '#app-3',
+            components: {
+                'liangpa':liangpaComponent 
+            }
+        })
+        
+
+
+        //Component 标签
+        //标签是Vue框架自定义的标签，它的用途就是可以动态绑定我们的组件，根据数据的不同更换不同的组件。
+        var componentA = {
+            template:`<div style="color:red;">I'm componentA</div>`
+        };
+        var componentB = {
+            template:`<div style="color:green;">I'm componentB</div>`
+        };
+        var componentC = {
+            template:`<div style="color:pink;">I'm componentC</div>`
+        };
+
+        var app4 = new Vue({
+            el: '#app-4',
+            data:{
+                who: 'componentA'
+            },
+            components:{
+                'componentA':componentA,
+                'componentB':componentB,
+                'componentC':componentC,
+            },
+            methods:{
+                changeComponent:function(){
+                    if(this.who == 'componentA'){
+                        this.who = 'componentB' ;
+                    }else if(this.who == 'componentB'){
+                        this.who = 'componentC';
+                    }else{
+                        this.who = 'componentA'
+                    }
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

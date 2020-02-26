@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义Vue指令</title>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div v-liang="color">{{num}}</div>
+        <button v-on:click="addFunc" >自增</button>
+        <p>
+            <button @click="unbind">解绑</button>
+        </p>
+    </div>
+
+    <hr>
+    <author></author>
+    <div id="vExtend"></div>
+
+
+    <hr>
+    <div id="app-2">
+        <p>{{count}}</p>
+        <ul>
+            <li v-for="item in arr">{{item}}</li>
+        </ul>
+    </div>
+    <button onclick="add()">add</button>
+
+
+    <hr>
+    <div id="app-3"></div>
+     <!--template 标签模板 -->
+    <template id="demo2">
+        <h1 style="color:red">我是Template</h1>
+    </template>
+
+    <!--script标签模板-->
+    <script type="x-template" id="demo3">
+        <h1 style="color:red">我是script标签模板</h1>
+    </script>
+
+
+    <script>
+        //Vue自定义扩展指令
+        //el: 指令所绑定的元素，可以用来直接操作DOM。
+        //binding: 一个对象，包含指令的很多信息。
+        //vnode: Vue编译生成的虚拟节点
+        Vue.directive('liang',{
+            bind: function(el,binding,node){//被绑定
+                console.log(el);
+                console.log(binding.name);
+                console.log('############# -1 - bind');
+                el.style = 'color:'+binding.value;
+            },
+            inserted: function(el,b,n){ //绑定到节点
+                console.log('############# -2 - inserted');
+            },
+            update:function(){//组件更新
+                console.log('3 - update');
+            },
+            componentUpdated:function(){//组件更新完成
+                console.log('4 - componentUpdated');
+            },
+            unbind:function(){//解绑
+                console.log('5 - unbind');
+            }
+
+        });
+
+        //Vue.extend 返回的是一个“扩展实例构造器”,也就是预设了部分选项的Vue实例构造器
+        var vueExtend = Vue.extend({
+            template: "<p><a :href='authorUrl'>{{authorName}}</a></p>",
+            data:function(){
+                return{
+                    authorName:'liangxp',
+                    authorUrl:'https://www.baidu.com/'
+                }
+            }
+        })
+
+        new vueExtend().$mount('author');
+        new vueExtend().$mount('#vExtend');
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                color: 'green',
+                num: 10
+            },
+            methods:{
+                addFunc:function(){
+                    this.num++;
+                },
+                unbind:function(){
+                    this.$destroy();
+                }
+            }
+            
+        });
+
+
+        //Vue set
+        var objData = {
+            count: 1,
+            goodName: 'car',
+            arr:['aaa','bbb','ccc']
+        };
+        var app2 = new Vue({
+            el: '#app-2',
+            data: objData        
+        });
+        function add(){
+            // app2.count++;
+            // objData.count++;
+            //设定为指定的值
+            Vue.set(objData,'count',4);
+            
+            //通过数组下标改变数组的值
+            Vue.set(app2.arr,1,'ddd');
+        }
+
+
+
+
+        //模板
+        var app3 = new Vue({
+            el: '#app-3',
+            data: {
+                message: 'hello vue'
+            },
+            //template:`   <h1 style="color:red">我是选项模板</h1>`
+            //template: '#demo2'
+            template:'#demo3'
+        });
+        
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <title>表单输入</title>
+</head>
+<body>
+    <h4>单行文本</h4>
+    <div id="app1">
+        <input type="text" v-model="message" />&nbsp;&nbsp;单行文本是：{{message}}
+    </div>
+    
+    <h4>多行文本</h4>
+    <div id="app2">
+        <textarea name="text" v-model="message"></textarea>&nbsp;&nbsp;多行文本是：{{message}}
+    </div>
+
+
+    <h4>复选框</h4>
+    <div id="app3">
+        单选复选框：<input type="checkbox" id="vc" v-model="checked">&nbsp;&nbsp;<label for="vc">{{ checked }}</label>
+    </div>
+
+    <h4>多复选框</h4>
+    <div id="app4">
+        多复选框
+        <input type="checkbox" id="eat" value="吃饭" v-model="hobby"><label for="eat">吃饭</label>
+        <input type="checkbox" id="sleep" value="睡觉" v-model="hobby"><label for="sleep">睡觉</label>
+        <input type="checkbox" id="dou" value="打豆豆" v-model="hobby"><label for="dou">打豆豆</label>
+        <span>选中的值：{{hobby}}</span>
+    </div>
+
+    <h4>单选按钮</h4>
+    <div id="app5">
+        <input type="radio" id="one" value="One" v-model="num"><label for="one">One</label>
+        <input type="radio" id="two" value="Two" v-model="num"><label for="two">Two</label>
+        <input type="radio" id="three" value="Three" v-model="num"><label for="three">Three</label>
+        <span>选中的值：{{num}}</span>
+    </div>
+
+
+    <h4>下拉选择框</h4>
+    <div id="app6">
+        <select name="answer" id="answer" v-model="answer">
+            <option value="">请选择</option>
+            <option value="a">A</option>
+            <option value="b">B</option>
+            <option value="c">C</option>
+        </select>
+        <span>选择的值：{{answer}}</span>
+    </div>
+
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: '#app1',
+            data: {
+                message: "Hello Vue"
+            }
+        });
+
+        var vm2 = new Vue({
+            el : '#app2',
+            data : {
+                message : 'hello liangxp'
+            }
+        });
+
+        //复选框
+        var vm3 = new Vue({
+            el : '#app3',
+            data : {
+                checked : true
+            }
+        });
+        //多复选框
+        var vm4 = new Vue({
+            el : '#app4',
+            data : {
+                hobby : []
+            }
+        })
+        //单选按钮
+        var vm5 = new Vue({
+            el : '#app5',
+            data : {
+                num : ''
+            }
+        });
+
+        //下拉选择框
+        var vm6 = new Vue({
+            el : '#app6',
+            data : {
+                answer : ''
+            }
+        });
+    </script>
+</body>
+</html>

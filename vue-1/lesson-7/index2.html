@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <title>使用自定义事件删除待办事项</title>
+</head>
+<body>
+    <div id="app">
+        <todo>
+            <todo-title slot="todo-title" v-bind:title="listTitle"></todo-title>
+            <todo-items slot="todo-items" v-for="(i,index) in items" v-bind:item="i" v-bind:index="index" v-on:delete="removeItem(index)"></todo-items>
+        </todo>
+    </div>
+
+    <script type="text/javascript">
+        //定义一个名为todo的待办事项组件，该组件中中放置了两个插槽，分别为todo-title和todo-item
+        Vue.component('todo',{
+            template: '<div>\
+                <slot name="todo-title"></slot>\
+                <ul>\
+                    <slot name="todo-items"></slot>\
+                </ul>\
+            </div>'
+        });
+
+        //定义一个名为todo-title的组件
+        Vue.component('todo-title',{
+            props:['title'],
+            template: '<div>{{title}}</div>'
+        });
+
+        //定义个名为todo-items的组件
+        Vue.component('todo-items',{
+            props: ['item','index'],
+            template: '<li>{{index + 1}}. {{item}}  <button v-on:click="remove">删除</button></li>',
+            methods: {
+                remove: function (index) {
+                    // 这里的 delete 是自定义事件的名称，需要在 HTML 中使用 v-on:delete 的方式指派
+                    this.$emit('delete', index);
+                }
+            }
+        });
+
+        //实例化vue
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                listTitle: "我的个人爱好",
+                items: ['吃饭','睡觉','打豆豆']
+            },
+            methods: {
+                removeItem: function (index) {
+                    console.log("删除 " + this.items[index] + " 成功");
+                    this.items.splice(index,1)
+                }
+            }
+        })
+    </script>
+</body>
+</html>
